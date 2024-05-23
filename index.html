@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OCR to CSV</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/pytesseract@latest/dist/pytesseract.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/opencv4nodejs"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pandas.js/1.4.0/pandas.min.js"></script>
+    <script>
+        function ocr_to_csv(input_path, output_path) {
+            // Load the image from the input path
+            const image = cv.imread(input_path);
+
+            // Perform OCR using pytesseract
+            const data = pytesseract.image_to_data(image, { output_type: pytesseract.Output.DICT });
+
+            // Convert OCR data to a pandas DataFrame
+            const df = pd.DataFrame(data);
+
+            // Save the DataFrame to a CSV file
+            const csv_filename = path.join(output_path, path.basename(input_path).replace('.png', '.csv'));
+            df.to_csv(csv_filename, { index: false });
+        }
+
+        // Example usage
+        const input_folder = 'input';
+        const output_folder = 'output';
+        const fs = require('fs');
+        const path = require('path');
+
+        fs.readdir(input_folder, (err, files) => {
+            if (err) throw err;
+            files.forEach(filename => {
+                if (filename.endsWith('.png')) {  // assuming your input files are PNGs
+                    const input_file = path.join(input_folder, filename);
+                    ocr_to_csv(input_file, output_folder);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
