@@ -1,0 +1,40 @@
+name: OCR Automation
+
+on:
+  push:
+    paths:
+      - 'input/**'
+
+jobs:
+  ocr_job:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytesseract opencv-python-headless pandas
+
+    - name: Install Tesseract
+      run: sudo apt-get install -y tesseract-ocr
+
+    - name: Run OCR script
+      run: python ocr_script.py
+
+    - name: Commit and push output CSV
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git add output/*
+        git commit -m 'Add OCR output CSV files'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
