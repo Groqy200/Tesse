@@ -7,13 +7,13 @@ import pandas as pd
 def ocr_to_csv(input_path, output_path):
     # Load the image from the input path
     image = cv2.imread(input_path)
-    
+
     # Perform OCR using pytesseract
     data = pytesseract.image_to_data(image, output_type=Output.DICT)
-    
+
     # Convert OCR data to a pandas DataFrame
     df = pd.DataFrame(data)
-    
+
     # Save the DataFrame to a CSV file
     csv_filename = os.path.join(output_path, os.path.basename(input_path).replace('.png', '.csv'))
     df.to_csv(csv_filename, index=False)
