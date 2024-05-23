@@ -1,4 +1,4 @@
-name: OCR Automation
+Iname: OCR Automation
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 jobs:
   ocr_job:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -37,4 +37,4 @@ jobs:
         git commit -m 'Add OCR output CSV files'
         git push
       env:
-        GITHUB_TOKEN: ${{ secrets._GITHUB_TOKEN_ }}
+        _GITHUB_TOKEN_: ${{ secrets.GITHUB_TOKEN }}
